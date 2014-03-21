@@ -1,13 +1,28 @@
 <?php 
-class MiniWSSE implements MiniAuth{
+/**
+ * A WSSE header generator
+ * @author yinli
+ *
+ */
+class MiniWSSE extends MiniAuth{
+	
+	const USERNAME = 'auth.username';
+	const PASSWORD = 'auth.password';
 	
 	public function auth(MiniRequest $request){
+		$this->validate($request);
 		if($request->protocol()==='SOAP'){
 			$request->prop('soap.headers', 'test');
 		}else{
 			$wsse_header = $this->generate_wsse_header(
-					$request->prop('auth.username'), $request->prop('auth.password'));
+					$request->prop(self::USERNAME), $request->prop(self::PASSWORD));
 			$request->header('X-WSSE', $wsse_header);
+		}
+	}
+	
+	private function validate(MiniRequest $request){
+		if($request->prop(self::USERNAME)===null || $request->prop(self::PASSWORD)===null){
+			throw new Exception(sprintf("'%s' and '%s' are required in WSSE authentication", self::USERNAME, self::PASSWORD));
 		}
 	}
 	

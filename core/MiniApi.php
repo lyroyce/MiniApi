@@ -1,6 +1,11 @@
 <?php 
 require_once __DIR__.'/MiniAutoloader.php';
 
+/**
+ * The main class that helps to make API request
+ * @author lyroyce
+ * 
+ */
 class MiniApi {
 
 	private $protocol_manager;
@@ -10,37 +15,84 @@ class MiniApi {
 	private $last_response;
 
 	public function __construct() {
-		$this->current_request = new MiniRequest($this);
 		$this->protocol_manager = new MiniProtocolManager();
 		$this->auth_manager = new MiniAuthManager();
 		$this->_init_protocol();
 		$this->_init_auth();
 	}
-	
+
+	/**
+	 * Build a MiniRequest object that representing a HTTP GET request.
+	 * The final URL is a concatenation of endpoint and method.
+	 * @param string $endpoint API server base URL.
+	 * @param string $method API method name.
+	 * @return MiniRequest a object representing API request
+	 */
 	public function get($endpoint, $method=''){
-		return $this->_build_request($endpoint, $method, 'GET');
+		return $this->request($endpoint, $method, 'GET');
 	}
 
+	/**
+	 * Build a MiniRequest object that representing a HTTP POST request.
+	 * The final URL is a concatenation of endpoint and method.
+	 * @param string $endpoint API server base URL.
+	 * @param string $method API method name.
+	 * @return MiniRequest a object representing API request
+	 */
 	public function post($endpoint, $method=''){
-		return $this->_build_request($endpoint, $method, 'POST');
+		return $this->request($endpoint, $method, 'POST');
 	}
 
+	/**
+	 * Build a MiniRequest object that representing a HTTP PUT request.
+	 * The final URL is a concatenation of endpoint and method.
+	 * @param string $endpoint API server base URL.
+	 * @param string $method API method name.
+	 * @return MiniRequest a object representing API request
+	 */
 	public function put($endpoint, $method=''){
-		return $this->_build_request($endpoint, $method, 'PUT');
+		return $this->request($endpoint, $method, 'PUT');
 	}
-	
+
+	/**
+	 * Build a MiniRequest object that representing a HTTP DELETE request.
+	 * The final URL is a concatenation of endpoint and method.
+	 * @param string $endpoint API server base URL.
+	 * @param string $method API method name.
+	 * @return MiniRequest a object representing API request
+	 */
 	public function delete($endpoint, $method=''){
-		return $this->_build_request($endpoint, $method, 'DELETE');
+		return $this->request($endpoint, $method, 'DELETE');
 	}
 
+	/**
+	 * Build a MiniRequest object that representing a HTTP OPTIONS request.
+	 * The final URL is a concatenation of endpoint and method.
+	 * @param string $endpoint API server base URL.
+	 * @param string $method API method name.
+	 * @return MiniRequest a object representing API request
+	 */
 	public function options($endpoint, $method=''){
-		return $this->_build_request($endpoint, $method, 'OPTIONS');
+		return $this->request($endpoint, $method, 'OPTIONS');
 	}
 
+	/**
+	 * Build a MiniRequest object that representing a HTTP HEAD request.
+	 * The final URL is a concatenation of endpoint and method.
+	 * @param string $endpoint API server base URL.
+	 * @param string $method API method name.
+	 * @return MiniRequest a object representing API request
+	 */
 	public function head($endpoint, $method=''){
-		return $this->_build_request($endpoint, $method, 'HEAD');
+		return $this->request($endpoint, $method, 'HEAD');
 	}
 	
+	/**
+	 * Send API request. 
+	 * If no request is specified, the last built request will be sent.
+	 * @param MiniRequest $request optional, the API request to be sent
+	 * @return MiniResponse a object representing API response
+	 */
 	public function call(MiniRequest $request=null){
 		if($request===null) $request = $this->current_request;
 
@@ -52,31 +104,41 @@ class MiniApi {
 	}
 
 	/**
-	 * Return last HTTP response
-	 * @return string
+	 * Return last received response
+	 * @return MiniResponse a object representing API response
 	 */
 	public function last_response () {
 		return $this->last_response;
 	}
+	
 	/**
-	 * Return last HTTP request
-	 * @return string
+	 * Return last sent request
+	 * @return MiniRequest a object representing API request
 	 */
 	public function last_request () {
 		return $this->last_request;
 	}
-	
+
+	/**
+	 * Register handler class for existing or new protocol 
+	 * @throws Exception if the specified class is not found
+	 */
 	public function register_protocol ($protocol, $handler_class) {
 		return $this->protocol_manager->register_staff($protocol, $handler_class);;
 	}
 
+	/**
+	 * Register handler class for existing or new authentication
+	 * @throws Exception if the specified class is not found
+	 */
 	public function register_auth ($auth, $handler_class) {
 		return $this->auth_manager->register_staff($auth, $handler_class);;
 	}
 	
-	private function _build_request($endpoint, $method, $protocol){
-		$this->current_request->init();
-		$this->current_request->protocol($protocol)->endpoint($endpoint)->method($method);
+	public function request($endpoint, $method, $protocol){
+		$request = new MiniRequest($this);
+		$request->protocol($protocol)->endpoint($endpoint)->method($method);
+		$this->current_request = $request;
 		return $this->current_request;
 	}
 

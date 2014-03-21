@@ -1,33 +1,38 @@
 <?php
-
+/**
+ * A HTTP client based on CURL
+ * @author yinli
+ *
+ */
 class MiniHttp extends MiniProtocol{
 	
 	protected function send(MiniRequest $request, MiniResponse $response){
 		$ch = $this->prepare_curl($request);
-		
 		$response_raw = curl_exec($ch);
 		
-		$request_header = curl_getinfo($ch, CURLINFO_HEADER_OUT );
-		$request_raw = $request_header . $request->body();
-		
 		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+		$response_header = substr($response_raw, 0, $header_size);
 		$response_body = substr($response_raw, $header_size);
+		$error = curl_error($ch);
 		
-		$err = curl_error($ch);
+		$response->infoMap(curl_getinfo($ch))
+			->body($response_body)
+			->response_header($response_header)
+			->response_raw($response_raw)
+			->error($error);
 		curl_close($ch);
-		$request->request_raw($request_raw);
-		$response->response($response_body)->response_raw($response_raw)->error($err);
 	}
 	
 	private function prepare_curl(MiniRequest $request){
 		$ch = curl_init();
 		
 		$options = $this->get_curl_options();
-		$options[CURLOPT_URL] = $request->build_url();
+		$options[CURLOPT_URL] = $request->endpoint() . $request->method();
 		$options[CURLOPT_HTTPHEADER] = $request->headers();
 		$options[CURLOPT_CUSTOMREQUEST] = $request->protocol();
 		if($this->is_method_with_body($request->protocol())){
-			$options[CURLOPT_POSTFIELDS] = $request->body();
+			$body = $request->body();
+			$options[CURLOPT_POSTFIELDS] = json_encode($body);
 		}else{
 			$request->body("");
 		}

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * A manager class that manages a number of specific handler classes
+ * @author yinli
+ *
+ */
 abstract class MiniManager {
 	private $staffs = array();
 	private $staff_type;

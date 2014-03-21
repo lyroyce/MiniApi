@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * The class loader
+ * @author yinli
+ *
+ */
 require_once(__DIR__.'/util/string.php');
 
 function mini_autoloader($class_name) 
