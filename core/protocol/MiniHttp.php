@@ -10,16 +10,22 @@ class MiniHttp extends MiniProtocol{
 		$ch = $this->prepare_curl($request);
 		$response_raw = curl_exec($ch);
 		
+		$request_header = curl_getinfo($ch, CURLINFO_HEADER_OUT);
+		$request_raw = $request_header . stringify($request->body());
+		
 		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 		$response_header = substr($response_raw, 0, $header_size);
 		$response_body = substr($response_raw, $header_size);
 		$error = curl_error($ch);
 		
-		$response->infoMap(curl_getinfo($ch))
-			->body($response_body)
-			->response_header($response_header)
-			->response_raw($response_raw)
-			->error($error);
+		$response->infoMap(curl_getinfo($ch));
+		$response->body($response_body);
+		$response->request_header($request_header);
+		$response->request_raw($request_raw);
+		$response->response_header($response_header);
+		$response->response_raw($response_raw);
+		$response->error($error);
+		
 		curl_close($ch);
 	}
 	

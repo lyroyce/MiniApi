@@ -44,6 +44,16 @@ class MiniResponse {
 	}
 
 	/**
+	 * Get or set raw request with headers.
+	 * @return string
+	 */
+	public function request_raw($request_raw=null){
+		if($request_raw===null) return $this->miniRequest->request_raw();
+		$this->miniRequest->request_raw($request_raw);
+		return $this;
+	}
+	
+	/**
 	 * Get or set raw response with headers.
 	 * @param string optional
 	 * @return mixed return this for setter and string for getter

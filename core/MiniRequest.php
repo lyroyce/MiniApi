@@ -131,8 +131,7 @@ class MiniRequest {
 	}
 
 	/**
-	 * Return raw request with headers.
-	 * If the request have not been sent, the raw request is same as request body.
+	 * Get or set raw request with headers.
 	 * @return string
 	 */
 	public function request_raw($request_raw=null){
@@ -146,10 +145,15 @@ class MiniRequest {
 	 * @return string
 	 */
 	public function debug(){
-		$detail = "Request: ".$this->protocol()." ".$this->endpoint().$this->method()."\n";
 		$request_raw = $this->request_raw();
-		$detail .= "$request_raw\n";
-		return $detail;
+		if($request_raw){
+			return "Request:\n$request_raw\n";
+		}else{
+			$body = stringify($this->body());
+			$detail = "Request: ".$this->protocol()." ".$this->endpoint()." ".$this->method()."\n";
+			$detail .= "$body\n";
+			return $detail;
+		}
 	}
 
 	/**
