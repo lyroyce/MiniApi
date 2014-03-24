@@ -10,7 +10,7 @@ Benefits:
 
 		require 'core/MiniApi.php';
 		$api = new MiniApi();
-		$api->post('http://www.google.com/user')->call('{"name", "John"}')
+		$api->post('http://www.google.com/user')->call('{"name", "John"}');
 	
 - It's easy to read and powerful
 
@@ -34,10 +34,14 @@ Benefits:
 			echo $response->error();
 		}
 	
-- It's highly extendable.
+- It's extendable.
 
+		class MySoapClient extends MiniProtocol{
+			protected function init_auth_registration(){}
+			protected function send(MiniRequest $request, MiniResponse $response){}
+		}
 		$api->register_protocol('SOAP', 'MySoapClient');
-		$api->register_auth('OAuth', 'MyOAuthHandler');
+		$api->request('http://www.google.com/?wsdl', 'User.New', 'SOAP')->call('{"name":"John"}');
 	
 Examples
 -------
