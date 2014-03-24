@@ -6,6 +6,10 @@
  */
 class MiniHttp extends MiniProtocol{
 	
+	protected function init_auth_registration(){
+		$this->register_auth('WSSE', 'MiniWsse');
+	}
+	
 	protected function send(MiniRequest $request, MiniResponse $response){
 		$ch = $this->prepare_curl($request);
 		$response_raw = curl_exec($ch);

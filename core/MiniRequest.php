@@ -85,7 +85,9 @@ class MiniRequest {
 		foreach ($this->propMap as $k=>$v){
 			if(strpos($k, self::HEADER_PREFIX)===0){
 				$k = substr($k, strlen(self::HEADER_PREFIX));
-				$headerArray[]=$k.': '.$v;
+				if(!is_object($v)){ // ignore object header which may be used in SOAP
+					$headerArray[]=$k.': '.$v;
+				}
 			}
 		}
 		return $headerArray;
@@ -94,10 +96,10 @@ class MiniRequest {
 	/**
 	 * Get or set request header
 	 * @param string $key header name
-	 * @param string $value optional, header value
+	 * @param mixed $value optional, header value
 	 * @example $request->header('Content-Type','application/json');
 	 * @example $value = $request->header('Content-Type');
-	 * @return string return this for setter and current value for getter
+	 * @return mixed return this for setter and current value for getter
 	 */
 	public function header($key, $value=null){
 		return $this->prop(self::HEADER_PREFIX.$key, $value);

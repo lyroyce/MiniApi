@@ -9,20 +9,17 @@ require_once __DIR__.'/MiniAutoloader.php';
 class MiniApi {
 
 	private $protocol_manager;
-	private $auth_manager;
 	private $current_request;
 	private $last_request;
 	private $last_response;
 
 	public function __construct() {
 		$this->protocol_manager = new MiniProtocolManager();
-		$this->auth_manager = new MiniAuthManager();
-		$this->_init_protocol();
-		$this->_init_auth();
+		$this->_init_protocol_registration();
 	}
 
 	/**
-	 * Build a MiniRequest object that representing a HTTP GET request.
+	 * Build a MiniRequest object that represents a HTTP GET request.
 	 * The final URL is a concatenation of endpoint and method.
 	 * @param string $endpoint API server base URL.
 	 * @param string $method API method name.
@@ -33,7 +30,7 @@ class MiniApi {
 	}
 
 	/**
-	 * Build a MiniRequest object that representing a HTTP POST request.
+	 * Build a MiniRequest object that represents a HTTP POST request.
 	 * The final URL is a concatenation of endpoint and method.
 	 * @param string $endpoint API server base URL.
 	 * @param string $method API method name.
@@ -44,7 +41,7 @@ class MiniApi {
 	}
 
 	/**
-	 * Build a MiniRequest object that representing a HTTP PUT request.
+	 * Build a MiniRequest object that represents a HTTP PUT request.
 	 * The final URL is a concatenation of endpoint and method.
 	 * @param string $endpoint API server base URL.
 	 * @param string $method API method name.
@@ -55,7 +52,7 @@ class MiniApi {
 	}
 
 	/**
-	 * Build a MiniRequest object that representing a HTTP DELETE request.
+	 * Build a MiniRequest object that represents a HTTP DELETE request.
 	 * The final URL is a concatenation of endpoint and method.
 	 * @param string $endpoint API server base URL.
 	 * @param string $method API method name.
@@ -66,7 +63,7 @@ class MiniApi {
 	}
 
 	/**
-	 * Build a MiniRequest object that representing a HTTP OPTIONS request.
+	 * Build a MiniRequest object that represents a HTTP OPTIONS request.
 	 * The final URL is a concatenation of endpoint and method.
 	 * @param string $endpoint API server base URL.
 	 * @param string $method API method name.
@@ -77,7 +74,7 @@ class MiniApi {
 	}
 
 	/**
-	 * Build a MiniRequest object that representing a HTTP HEAD request.
+	 * Build a MiniRequest object that represents a HTTP HEAD request.
 	 * The final URL is a concatenation of endpoint and method.
 	 * @param string $endpoint API server base URL.
 	 * @param string $method API method name.
@@ -85,6 +82,16 @@ class MiniApi {
 	 */
 	public function head($endpoint, $method=''){
 		return $this->request($endpoint, $method, 'HEAD');
+	}
+
+	/**
+	 * Build a MiniRequest object that represents a SOAP request.
+	 * @param string $endpoint WSDL URL.
+	 * @param string $method SOAP method name.
+	 * @return MiniRequest a object representing API request
+	 */
+	public function soap($endpoint, $method){
+		return $this->request($endpoint, $method, 'SOAP');
 	}
 	
 	/**
@@ -97,7 +104,6 @@ class MiniApi {
 		if($request===null) $request = $this->current_request;
 
 		$this->_before_call($request);
-		$request = $this->auth_manager->handle($request);
 		$response = $this->protocol_manager->handle($request);
 		$this->_after_call($response);
 		return $response;
@@ -126,14 +132,6 @@ class MiniApi {
 	public function register_protocol ($protocol, $handler_class) {
 		return $this->protocol_manager->register_staff($protocol, $handler_class);;
 	}
-
-	/**
-	 * Register handler class for existing or new authentication
-	 * @throws Exception if the specified class is not found
-	 */
-	public function register_auth ($auth, $handler_class) {
-		return $this->auth_manager->register_staff($auth, $handler_class);;
-	}
 	
 	public function request($endpoint, $method, $protocol){
 		$request = new MiniRequest($this);
@@ -151,16 +149,14 @@ class MiniApi {
 		$this->last_response = $response;
 	}
 	
-	private function _init_protocol(){
+	private function _init_protocol_registration(){
 		$this->register_protocol('GET', 'MiniHttp');
 		$this->register_protocol('POST', 'MiniHttp');
 		$this->register_protocol('PUT', 'MiniHttp');
 		$this->register_protocol('DELETE', 'MiniHttp');
 		$this->register_protocol('OPTIONS', 'MiniHttp');
 		$this->register_protocol('HEAD', 'MiniHttp');
-	}
-	private function _init_auth(){
-		$this->register_auth('WSSE', 'MiniWSSE');
+		$this->register_protocol('SOAP', 'MiniSoap');
 	}
 	
 }

@@ -5,14 +5,26 @@
  *
  */
 class MiniSoap extends MiniProtocol{
+
+	protected function init_auth_registration(){
+		$this->register_auth('WSSE', 'MiniWsse');
+	}
 	
 	protected function send(MiniRequest $request, MiniResponse $response){
 		try {
-			$client = new SoapClient($request->endpoint());
-			$response_body = $client ->__soapCall($request->method(), $request->body());
+			$client = new SoapClient($request->endpoint(), array('trace'=>true));
+		} catch (Exception $ex) {
+			$response->error($ex->__toString());
+			return;
+		}
+		try {
+			$headers = array($request->header('X-WSSE'));
+			$arguments = $request->body();
+			$arguments = is_array($arguments)?$arguments:json_decode($arguments,true);
+			$response_body = $client ->__soapCall($request->method(), $arguments, array(), $headers);
 			$error = "";
 		} catch (Exception $ex) {
-			$response_body = '';
+			$response_body = null;
 			$error = $ex->__toString();
 		}
 		$request_header = $client->__getLastRequestHeaders();
