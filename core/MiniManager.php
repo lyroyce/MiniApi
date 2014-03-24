@@ -49,7 +49,17 @@ abstract class MiniManager {
 		return strtoupper($name);
 	}
 	
+	/**
+	 * Return the staff name as the registration key
+	 * @param MiniRequest $request
+	 */
 	protected abstract function get_staff_name(MiniRequest $request);
+	
+	/**
+	 * Handle API request using the staff provided
+	 * @param MiniRequest $request
+	 * @param unknown_type $staff
+	 */
 	protected abstract function handle_request(MiniRequest $request, $staff);
 }
 ?>

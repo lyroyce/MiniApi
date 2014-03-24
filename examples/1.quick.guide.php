@@ -1,5 +1,8 @@
 <?php 
 
+/**
+ * Dependency
+ */
 require_once __DIR__.'/../core/MiniApi.php';
 $api = new MiniApi();
 

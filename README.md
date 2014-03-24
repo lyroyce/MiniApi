@@ -1,7 +1,7 @@
 MiniApi
 ===============
 
-If you want a simple & quick way to invoke web API, MiniApi would be your good partner. 
+MiniApi is a PHP based framework which contains everything you need to interact with web API.
 
 Benefits:
 -------

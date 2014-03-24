@@ -126,7 +126,7 @@ class MiniApi {
 	}
 
 	/**
-	 * Register handler class for existing or new protocol 
+	 * Register handler class for an existing or new protocol 
 	 * @throws Exception if the specified class is not found
 	 */
 	public function register_protocol ($protocol, $handler_class) {
