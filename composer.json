@@ -1,0 +1,14 @@
+{
+    "name": "miniapi/mini-api",
+    "description": "This Bundle provides everything you need to interact with web API. It's object-oriented, simple and powerful.",
+    "keywords": ["rest", "soap", "API", "WSSE", "JSON"],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "homepage": "https://github.com/lyroyce/MiniApi",
+    "authors": [
+        {
+            "name": "lyroyce"
+        }
+    ]
+}
