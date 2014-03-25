@@ -1,5 +1,5 @@
 {
-    "name": "miniapi/mini-api",
+    "name": "miniapi/miniapi",
     "description": "This Bundle provides everything you need to interact with web API. It's object-oriented, simple and powerful.",
     "keywords": ["rest", "soap", "API", "WSSE", "JSON"],
     "require": {
