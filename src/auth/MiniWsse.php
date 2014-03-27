@@ -4,6 +4,11 @@
  * @author yinli
  * @see SOAPHeader
  */
+namespace MiniApi\Auth;
+
+use MiniApi\MiniAuth;
+use MiniApi\MiniRequest;
+
 class MiniWSSE extends MiniAuth{
 	
 	const USERNAME = 'wsse.username';
@@ -13,14 +18,14 @@ class MiniWSSE extends MiniAuth{
 		$username = $request->prop('wsse.username');
 		$password = $request->prop('wsse.password');
 		if($username===null || $password===null){
-			throw new Exception(sprintf("'%s' and '%s' are required in WSSE authentication", 
+			throw new \Exception(sprintf("'%s' and '%s' are required in WSSE authentication", 
 					'wsse.username', 'wsse.password'));
 		}
 		
 		if($request->protocol()==='SOAP'){
 			$namespace = $request->prop('wsse.namespace');
 			if($namespace===null){
-				throw new Exception(sprintf("'%s' is required in SOAP WSSE authentication", 
+				throw new \Exception(sprintf("'%s' is required in SOAP WSSE authentication", 
 						'wsse.namespace'));
 			}
 			$wsse_header = $this->generate_wsse_header_soap($username, $password, $namespace);
@@ -67,7 +72,7 @@ class MiniWSSE extends MiniAuth{
 		    $base64nonce,
 		    $created
 		);
-		return new SOAPHeader($namespace, 'Security', new SoapVar($header, XSD_ANYXML));
+		return new \SOAPHeader($namespace, 'Security', new \SoapVar($header, XSD_ANYXML));
 	}
 }
 ?>

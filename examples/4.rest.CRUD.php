@@ -1,6 +1,9 @@
 <?php 
-require_once __DIR__.'/../core/MiniApi.php';
-$api = new MiniApi();
+/**
+ * Dependency
+ */
+require_once __DIR__.'/../vendor/autoload.php';
+$api = new MiniApi\MiniApi();
 
 echo "1. make a simple GET request, and output response body.\n";
 $response = $api->get('http://www.google.com')->call();

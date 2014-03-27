@@ -1,5 +1,7 @@
 <?php 
-require_once __DIR__.'/MiniAutoloader.php';
+namespace MiniApi;
+
+use MiniApi\MiniProtocolManager;
 
 /**
  * The main class that helps to make API request
@@ -150,13 +152,13 @@ class MiniApi {
 	}
 	
 	private function _init_protocol_registration(){
-		$this->register_protocol('GET', 'MiniHttp');
-		$this->register_protocol('POST', 'MiniHttp');
-		$this->register_protocol('PUT', 'MiniHttp');
-		$this->register_protocol('DELETE', 'MiniHttp');
-		$this->register_protocol('OPTIONS', 'MiniHttp');
-		$this->register_protocol('HEAD', 'MiniHttp');
-		$this->register_protocol('SOAP', 'MiniSoap');
+		$this->register_protocol('GET', 'MiniApi\Protocol\MiniHttp');
+		$this->register_protocol('POST', 'MiniApi\Protocol\MiniHttp');
+		$this->register_protocol('PUT', 'MiniApi\Protocol\MiniHttp');
+		$this->register_protocol('DELETE', 'MiniApi\Protocol\MiniHttp');
+		$this->register_protocol('OPTIONS', 'MiniApi\Protocol\MiniHttp');
+		$this->register_protocol('HEAD', 'MiniApi\Protocol\MiniHttp');
+		$this->register_protocol('SOAP', 'MiniApi\Protocol\MiniSoap');
 	}
 	
 }

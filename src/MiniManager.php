@@ -4,6 +4,8 @@
  * @author yinli
  *
  */
+namespace MiniApi;
+
 abstract class MiniManager {
 	private $staffs = array();
 	private $staff_type;
@@ -18,7 +20,7 @@ abstract class MiniManager {
 		if($name){
 			$staff = $this->get_staff($name);
 			if($staff===null){
-				throw new Exception("No registered class for '$name'");
+				throw new \Exception("No registered class for '$name'");
 			}
 			return $this->handle_request($request, $staff);
 		}else{
@@ -41,7 +43,7 @@ abstract class MiniManager {
 			$name = $this->normalize($name);
 			$this->staffs[$name] = $staff;
 		}else{
-			throw new Exception("Class '$staff_class' is not of type '$this->staff_type'");
+			throw new \Exception("Class '$staff_class' is not of type '$this->staff_type'");
 		}
 	}
 	

@@ -4,6 +4,8 @@
  * @author yinli
  *
  */
+namespace MiniApi;
+
 abstract class MiniAuth {
 
 	/**

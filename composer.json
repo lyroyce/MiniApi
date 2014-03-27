@@ -17,5 +17,10 @@
         "branch-alias": {
             "dev-master": "1.0-dev"
         }
+    },
+    "autoload": {
+        "psr-4": {
+            "MiniApi\\": "src/"
+        }
     }
 }

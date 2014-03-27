@@ -5,10 +5,12 @@
  * @author yinli
  *
  */
+namespace MiniApi;
+
 class MiniAuthManager extends MiniManager{
 	
 	public function __construct() {
-		parent::__construct('MiniAuth');
+		parent::__construct('MiniApi\MiniAuth');
 	}
 	
 	protected function get_staff_name(MiniRequest $request){

@@ -3,8 +3,8 @@
 /**
  * Dependency
  */
-require_once __DIR__.'/../core/MiniApi.php';
-$api = new MiniApi();
+require_once __DIR__.'/../vendor/autoload.php';
+$api = new MiniApi\MiniApi();
 
 /**
  * Simple

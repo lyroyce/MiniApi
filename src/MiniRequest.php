@@ -4,6 +4,10 @@
  * @author yinli
  *
  */
+namespace MiniApi;
+
+use MiniApi\Utils\MiniUtils;
+
 class MiniRequest {
 
 	const HEADER_PREFIX = 'header.';
@@ -151,7 +155,7 @@ class MiniRequest {
 		if($request_raw){
 			return "Request:\n$request_raw\n";
 		}else{
-			$body = stringify($this->body());
+			$body = MiniUtils::stringify($this->body());
 			$detail = "Request: ".$this->protocol()." ".$this->endpoint()." ".$this->method()."\n";
 			$detail .= "$body\n";
 			return $detail;
@@ -163,7 +167,7 @@ class MiniRequest {
 	 * @return string
 	 */
 	public function __toString(){
-		return stringify($this->body(), 128);
+		return MiniUtils::stringify($this->body(), 128);
 	}
 	
 	private function init(){

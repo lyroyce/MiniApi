@@ -4,10 +4,17 @@
  * @author yinli
  *
  */
+namespace MiniApi\Protocol;
+
+use MiniApi\MiniProtocol;
+use MiniApi\MiniRequest;
+use MiniApi\MiniResponse;
+use MiniApi\Utils\MiniUtils;
+
 class MiniHttp extends MiniProtocol{
 	
 	protected function init_auth_registration(){
-		$this->register_auth('WSSE', 'MiniWsse');
+		$this->register_auth('WSSE', 'MiniApi\Auth\MiniWsse');
 	}
 	
 	protected function send(MiniRequest $request, MiniResponse $response){
@@ -15,7 +22,7 @@ class MiniHttp extends MiniProtocol{
 		$response_raw = curl_exec($ch);
 		
 		$request_header = curl_getinfo($ch, CURLINFO_HEADER_OUT);
-		$request_raw = $request_header . stringify($request->body());
+		$request_raw = $request_header . MiniUtils::stringify($request->body());
 		
 		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 		$response_header = substr($response_raw, 0, $header_size);

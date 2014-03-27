@@ -4,6 +4,10 @@
  * @author yinli
  *
  */
+namespace MiniApi;
+
+use MiniApi\Utils\MiniUtils;
+
 class MiniResponse {
 
 	private $miniRequest;
@@ -116,7 +120,7 @@ class MiniResponse {
 		// include raw request if more is true
 		$detail = $more ? $this->miniRequest->debug()."\n" : "";
 		// stringify in case the response is a non-string
-		$response_raw = stringify($this->response_raw());
+		$response_raw = MiniUtils::stringify($this->response_raw());
 		$detail .= "Response:\n$response_raw\n";
 		
 		$error = $this->error();
@@ -130,7 +134,7 @@ class MiniResponse {
 	 * @return string
 	 */
 	public function __toString(){
-		return stringify($this->body(), 128);
+		return MiniUtils::stringify($this->body(), 128);
 	}
 
 	/**
