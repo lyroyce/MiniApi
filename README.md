@@ -1,15 +1,14 @@
 MiniApi
 ===============
 
-MiniApi is a PHP based framework which contains everything you need to interact with web API.
+MiniApi is a simple and flexible API client which contains everything you need to interact with web API.
 
 Benefits:
 -------
 
 - It's really simple
 
-		require 'core/MiniApi.php';
-		$api = new MiniApi();
+		$api = new MiniApi\MiniApi();
 		$api->post('http://www.google.com/user')->call('{"name", "John"}');
 	
 - It's easy to read and powerful
